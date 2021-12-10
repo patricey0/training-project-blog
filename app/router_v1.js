@@ -12,8 +12,8 @@ const router = Router();
 
 //routes
 router.get(`/posts`, postController.getPosts);
-router.get(`/posts/:id(\d{2})`, postController.getOnePost);
-router.get(`/posts/category/:id(\d{2})`, postController.getPostByCat);
+router.get(`/posts/:id(\d+)`, postController.getOnePost);
+router.get(`/posts/category/:id(\d+)`, postController.getPostByCat);
 router.post(`/posts`, postController.createPost);
 
 router.get(`/categories`, categoryController.getCategories);

@@ -15,8 +15,7 @@ module.exports = {
 
     getPosts: async function (req, res) {
         try {
-            const posts = await Post.findAll({
-            });
+            const posts = await Post.findAll();
             res.status(200).send(posts);
         } catch (error) {
             res.status(500).send(error.message);
@@ -26,9 +25,7 @@ module.exports = {
     getOnePost: async function (req, res) {
         const id = req.params.id;
         try {
-            const post = await Post.findByPk(1, {
-                include: 'categories'
-            })
+            const post = await Post.findByPk(id);
             res.status(200).send(post);
         } catch (error) {
             res.status(500).send(error.message);
@@ -38,8 +35,7 @@ module.exports = {
     getPostByCat: async function (req, res) {
         const id = req.params.id;
         try {
-            const posts = Post.findAll({
-            })
+            const posts = Post.findAll();
             res.status(200).send(posts);
         } catch (error) {
             res.status(500).send(error.message);
