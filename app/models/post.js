@@ -4,7 +4,7 @@ const {DataTypes, Model} = require('sequelize');
 class Post extends Model {};
 
 Post.init({
-    slub: DataTypes.TEXT,
+    slug: DataTypes.TEXT,
     title: DataTypes.TEXT,
     excerpt: DataTypes.TEXT,
     content: DataTypes.TEXT

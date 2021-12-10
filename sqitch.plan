@@ -2,3 +2,4 @@
 %project=oblog
 
 oblog-v1 2021-12-10T10:53:39Z patricey0 <patrice.yolle@gmail.com> # creation tables
+categoryKey 2021-12-10T13:20:21Z patricey0 <patrice.yolle@gmail.com> # add foreign key on post table
