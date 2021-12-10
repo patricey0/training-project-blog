@@ -16,7 +16,7 @@ module.exports = {
     getPosts: async function (req, res) {
         try {
             const posts = await Post.findAll();
-            res.status(200).send(posts);
+            res.status(200).send(posts.rows);
         } catch (error) {
             res.status(500).send(error.message);
         }
@@ -35,8 +35,10 @@ module.exports = {
     getPostByCat: async function (req, res) {
         const id = req.params.id;
         try {
-            const posts = Post.findAll();
-            res.status(200).send(posts);
+            const posts = Post.findAll({
+                where: {category_id: id}
+            });
+            res.status(200).send(posts.rows);
         } catch (error) {
             res.status(500).send(error.message);
         }
@@ -53,6 +55,4 @@ module.exports = {
             res.status(500).send(error.message);
         }
     }
-
-
 }
