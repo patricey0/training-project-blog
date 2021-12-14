@@ -1,17 +1,18 @@
-//import database, type and models from sequelize
-const sequelize = require('../database/database');
-const {DataTypes, Model} = require('sequelize');
+const client = require('../database');
 
-//init of new model has Category
-class Category extends Model {};
+class Category {
 
-//setting fields 
-Category.init({
-    label: DataTypes.TEXT,
-    route: DataTypes.TEXT
-}, {
-    sequelize,
-    tableName: 'category'
-});
+    constructor(obj={}) {
+        for (const propName in obj) {
+            this[propName] = obj[propName];
+        }
+    }
+
+    static async findAll() {
+        const {rows} = await client.query('SELECT * FROM category');
+        return rows.map(row => new Category(row));
+    }
+
+}
 
 module.exports = Category;

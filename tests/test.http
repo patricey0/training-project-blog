@@ -1,8 +1,10 @@
-GET http://localhost:5000/v1/posts/category/2 HTTP/1.1
+@host=http://localhost:5000/v1
+
+GET {{host}}/posts/categories/3 HTTP/1.1
 
 ###
 
-POST http://localhost:5000/v1/categories HTTP/1.1
+POST {{host}}/categories HTTP/1.1
 content-type: application/json
 
 {

@@ -1,91 +1,34 @@
-const postsData = require(`./posts.json`);
-const catsData = require(`./categories.json`);
+require('dotenv').config();
 
-const pg = require('pg');
+const categories = require('./categories.json');
+const posts = require('./posts.json');
 
-const client = new pg.Client({
-    user: 'postgres',
-    password: 'js4life',
-    database: 'oblog',
-    host: 'localhost',
-    port: 5432,
-});
+const client = require('../app/database');
 
-client.connect();
+const importData = async () => {
+    //on supprime les événtuels enregistrements présents
+    // et on reset la numéroation des ids afin que le 1er rec soit d'id 1, le 2nd d'id 2, etc...
+    await client.query('TRUNCATE post, category RESTART IDENTITY');
+    //on va stocker l'id des catégories au fur et à mesure des insertions
+    //on en a besoin pour créer les posts ensuite, ce sera plus efficace que de refaire une requête pour récupérer l'id en base
+    const categoriesIds = {};
 
-// client.query('SELECT * FROM category;', (err, res)=>{
-//     if(err) console.log(err);
-//     console.log(res.rows[1]);
-// })
+    //on insère les catégories et on remplit l'object categoriesIds
+    for (const category of categories) {
+        //avec RETURNING, on demande explicitement à Postgres de nous renvoyer dans le code l'id de l'enregistrement fraichement créé
+        const {rows} = await client.query('INSERT INTO category(route, label) VALUES($1, $2) RETURNING id', [category.route, category.label]);
+        //on stocke cet id en l'associant au label de la catégorie
+        categoriesIds[category.label] = rows[0].id;
+        console.log(categoriesIds);
+    }
 
-// for (const cat of catsData) {
-//     // console.log(cat.label);
-//     const query = `
-//         INSERT INTO category (label, route)
-//         VALUES ($1, $2);`
-//     client.query(query, [cat.label, cat.route], (err, res) => {
-//         if(err) console.log(err);
-//         console.log(res);
-//     });
-// };
+    for (const post of posts) {
+        //on récupère l'id de la catégorie de chaque post et on fait l'insertion
+        const categoryId = categoriesIds[post.category];
+        await client.query('INSERT INTO post(slug, title, excerpt, content, category_id) VALUES($1, $2, $3, $4, $5)', [post.slug, post.title, post.excerpt, post.content, categoryId]);
+    }
+    client.end();
 
-for (const post of postsData) {
-    let query;
-    switch (post.category) {
-        case `Accueil`:
-            post.category = 1;
-            console.log(post.category);
-            query = `
-                insert into post (slug, title, excerpt, content, category_id) values ($1, $2, $3, $4, $5);`
-            client.query(query, [post.slug, post.title, post.excerpt, post.content, post.category], (err, res) => {
-                if(err) console.log(err);
-                if(res) console.log(`Insert ok for ${post.title}`);
-            });
-            break;
-        case `Angular`:
-            post.category = 2;
-            console.log(post.category);
-            query = `
-            insert into post (slug, title, excerpt, content, category_id) values ($1, $2, $3, $4, $5);`
-            client.query(query, [post.slug, post.title, post.excerpt, post.content, post.category], (err, res) => {
-                if(err) console.log(err);
-                if(res) console.log(`Insert ok for ${post.title}`);
-            });
-            
-            break;
-        case `React`:
-            post.category = 3;
-            console.log(post.category);
-            query = `
-            insert into post (slug, title, excerpt, content, category_id) values ($1, $2, $3, $4, $5);`
-            client.query(query, [post.slug, post.title, post.excerpt, post.content, post.category], (err, res) => {
-                if(err) console.log(err);
-                if(res) console.log(`Insert ok for ${post.title}`);
-            });
-            
-        break;
-        case `O’clock`:
-            post.category = 4;
-            console.log(post.category);            
-            query = `
-            insert into post (slug, title, excerpt, content, category_id) values ($1, $2, $3, $4, $5);`
-            client.query(query, [post.slug, post.title, post.excerpt, post.content, post.category], (err, res) => {
-                if(err) console.log(err);
-                if(res) console.log(`Insert ok for ${post.title}`);
-            });
-            
-        break;
-        case `Autre`:
-            post.category = 5;
-            console.log(post.category);
-            query = `
-            insert into post (slug, title, excerpt, content, category_id) values ($1, $2, $3, $4, $5);`
-            client.query(query, [post.slug, post.title, post.excerpt, post.content, post.category], (err, res) => {
-                if(err) console.log(err);
-                if(res) console.log(`Insert ok for ${post.title}`);
-            });
-        break;
-        default:
-            break;
-    };
-}
+};
+
+importData();
