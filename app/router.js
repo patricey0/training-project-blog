@@ -16,9 +16,8 @@ const router = Router();
  * @tags Posts
  * @returns {array<Post>} 200 - An array of posts
  */
-router.get('/posts', postController.findAll);
 
-router.get('/', redirect('/posts'))
+router.get('/posts', postController.findAll);
 
 
 /**
