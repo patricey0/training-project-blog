@@ -17,9 +17,9 @@ POST {{host}}/posts
 Content-Type: application/json
 
 {
-    "slug": "testing22",
-    "title": "testing22",
+    "slug": "testing23",
+    "title": "testing23",
     "excerpt": "testing",
     "content": "testing",
-    "category_id": 100
+    "category_id": "3"
 }
