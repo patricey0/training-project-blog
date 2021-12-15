@@ -11,3 +11,15 @@ content-type: application/json
     "route": "/autre",
     "label": "Autre"
 }
+
+### Ajout d'un nouveau post
+POST {{host}}/posts
+Content-Type: application/json
+
+{
+    "slug": "testing22",
+    "title": "testing22",
+    "excerpt": "testing",
+    "content": "testing",
+    "category_id": 100
+}
