@@ -8,6 +8,7 @@ const client = require('../database');
  * @property {string} title
  * @property {string} excerpt
  * @property {string} content
+ * @property {string} category
  * @property {number} category_id
  */
 
@@ -34,7 +35,7 @@ class Post {
      * @async
      */
     static async findAll() {
-        const {rows} = await client.query('SELECT * FROM post');
+        const {rows} = await client.query('SELECT * FROM post_with_category');
         return rows.map(row => new Post(row));
         /*
         const posts = [];
@@ -54,7 +55,7 @@ class Post {
      * @async
      */
     static async findOne(id) {
-        const {rows} = await client.query('SELECT * FROM post WHERE id=$1', [id]);
+        const {rows} = await client.query('SELECT * FROM post_with_category WHERE id=$1', [id]);
         //on vérifie qu'on a bien obtenu des data de la BDD
         if (rows[0]) { // if (rows[0] !== undefined)
             return new Post(rows[0]);
@@ -72,7 +73,7 @@ class Post {
      * @async
      */
     static async findByCategory(catId) {
-        const {rows} = await client.query('SELECT * FROM post WHERE category_id=$1', [catId]);
+        const {rows} = await client.query('SELECT * FROM post_with_category WHERE category_id=$1', [catId]);
         return rows.map(row => new Post(row));
     }
 
