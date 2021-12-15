@@ -3,6 +3,8 @@ const express = require('express');
 
 const router = require('./app/router');
 
+const cors = require('cors');
+
 const app = express();
 
 const port = process.env.PORT || 5000;
@@ -50,10 +52,11 @@ const firstFunction = expressJSDocSwagger(app);
 
 //on ajoute un middleware à notre app express en exécutant cette 1ère fonction qui va prendre en paramètre l'object de config
 firstFunction(options);
+//welcome everybody, please don't messed out
+app.use(cors());
 
 //on prévient express qu'il peut recevoir des infos au format json dans le body de la request
 app.use(express.json());
-
 
 app.use('/v1', router);
 

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/O-clock-XIII/E06-data-oblog-patricey0#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-jsdoc": "^1.0.2",
