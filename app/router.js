@@ -5,6 +5,7 @@ const categoryController = require('./controllers/categoryController');
 
 const postSchema = require('./schemas/postSchema');
 const {validateBody} = require('./middlewares/validator');
+const { redirect } = require('express/lib/response');
 
 const router = Router();
 
@@ -16,6 +17,8 @@ const router = Router();
  * @returns {array<Post>} 200 - An array of posts
  */
 router.get('/posts', postController.findAll);
+
+router.get('/', redirect('/posts'))
 
 
 /**
